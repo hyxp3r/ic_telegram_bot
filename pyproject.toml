@@ -1,0 +1,20 @@
+[tool.poetry]
+name = "ic-telegram-bot"
+version = "0.1.0"
+description = ""
+authors = ["Evgeniy Ermakov <erma2001@mail.ru>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+aiogram = "^3.4.1"
+asyncpg = "^0.29.0"
+sqlalchemy = {version = "^2.0.27", extras = ["asyncio"]}
+alembic = "^1.13.1"
+sqlalchemy-utils = "^0.41.1"
+pydantic-settings = "^2.2.1"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

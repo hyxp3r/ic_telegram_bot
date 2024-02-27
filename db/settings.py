@@ -1,12 +1,12 @@
 from typing import Any, Dict
 
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 from pydantic_settings import BaseSettings
 from sqlalchemy.ext.asyncio import AsyncEngine, create_async_engine
 
 
 class BaseDBModel(BaseModel):
-    url: str
+    url: str 
     engine_config: Dict[str, Any] = {}
     echo: int = 0
 
@@ -17,7 +17,8 @@ class BaseDBModel(BaseModel):
 
 class DBSettings(BaseDBModel, BaseSettings):
     class Config:
-        env_prefix = 'DB_'
+        env_file = ".env"
+        env_prefix = "DB_"
 
     def setup_engine_async(self) -> AsyncEngine:
         engine = self.async_engine

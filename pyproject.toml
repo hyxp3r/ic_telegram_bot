@@ -12,7 +12,7 @@ asyncpg = "^0.29.0"
 sqlalchemy = {version = "^2.0.27", extras = ["asyncio"]}
 alembic = "^1.13.1"
 sqlalchemy-utils = "^0.41.1"
-pydantic-settings = "^2.2.1"
+pydantic-settings = "2.1.0"
 
 
 [build-system]

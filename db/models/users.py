@@ -26,6 +26,7 @@ class Student(BaseTable):
             personal_number=self.personal_number,
             fio=short_fio,
             program=self.program,
-            group=self.group
+            group=self.group,
+            api_key=self.api_key
         )
         return user

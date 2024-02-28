@@ -7,7 +7,8 @@ from aiogram.utils.keyboard import InlineKeyboardBuilder
 from bot.static.text.buttons.home_buttons import (
                                                     IC_SITE,
                                                     IC_GROUP,
-                                                    FINANCE
+                                                    FINANCE,
+                                                    ROOT
                                                 )
 class Action(str, Enum):
     finance = "finance"
@@ -30,6 +31,15 @@ def build_ic_kb() -> InlineKeyboardMarkup:
     builder.button(
         text=FINANCE,
         callback_data=IcCbData(action=Action.finance).pack()
+    )
+    builder.adjust(1)
+    return builder.as_markup()
+
+def build_finance_kb() -> InlineKeyboardMarkup:
+    builder = InlineKeyboardBuilder()
+    builder.button(
+        text=ROOT,
+        callback_data=IcCbData(action=Action.root).pack()
     )
     builder.adjust(1)
     return builder.as_markup()

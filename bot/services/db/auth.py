@@ -16,16 +16,16 @@ async def insert_user(user:User) -> int:
         sudent_id = await session.execute(stmt)
     return sudent_id
 
-async def get_student_telegram_view(telegram_id:str) -> UserTelegramView | None:
-    stmt = select(Student).filter_by(telegram_id=telegram_id)
+async def get_student_telegram_view(telegram_id:int) -> UserTelegramView | None:
+    stmt = select(Student).filter_by(telegram_id=str(telegram_id))
     async with create_async_session(async_session_maker) as session:
         res = await session.execute(stmt)
         student = res.one_or_none()
     if student:
         return student[0].make_user_view()
 
-async def get_api_key(telegram_id:str) -> str | None:
-    stmt = select(Student.api_key).filter_by(telegram_id=telegram_id)
+async def get_api_key(telegram_id:int) -> str | None:
+    stmt = select(Student.api_key).filter_by(telegram_id=str(telegram_id))
     async with create_async_session(async_session_maker) as session:
         res = await session.execute(stmt)
         api_key = res.scalar_one_or_none()

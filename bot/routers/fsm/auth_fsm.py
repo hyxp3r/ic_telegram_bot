@@ -8,7 +8,10 @@ from bot.services.http.auth import send_verification_code, verify_code
 from bot.schemas.users import User
 from bot.static.text.messages.auth_messages import (make_masked_email,
                                                     PERSONAL_NUMBER_ERROR_VALIDATION,
-                                                    PERSONAL_NUMBER_ERROR_NOT_FOUND)
+                                                    PERSONAL_NUMBER_ERROR_NOT_FOUND,
+                                                    PERSONAL_NUMBER_ERROR_NO_EMAIL,
+                                                    VERIFICATION_ERROR_INCORRECT,
+                                                    VERIFICATION_ERROR_EXPIRED)
 from bot.static.text.messages.home_messages import make_home_message
 from bot.keybords.inline_keyboards.ic_inline import build_ic_kb
 
@@ -40,7 +43,7 @@ async def process_personal_number(message: Message, state: FSMContext) -> None:
     except:
         await message.answer(PERSONAL_NUMBER_ERROR_VALIDATION)
         await state.set_state(Auth.personal_number)
-        return None
+        return
     response = await send_verification_code(message.text)
     if response.status == 200:
         response_json = await response.json()
@@ -51,6 +54,9 @@ async def process_personal_number(message: Message, state: FSMContext) -> None:
     elif response.status == 404:
             await message.answer(PERSONAL_NUMBER_ERROR_NOT_FOUND)
             await state.set_state(Auth.personal_number)
+    elif response.status == 422:
+            await message.answer(PERSONAL_NUMBER_ERROR_NO_EMAIL)
+            await state.clear()
 
 
 @router.message(Auth.verification_code)
@@ -62,16 +68,16 @@ async def process_verification_code(message: Message, state: FSMContext) -> None
         response_json = await response.json()
         response_json["telegram_id"] = str(message.from_user.id)
         user = make_user_schema(response_json)
-        user_id = await insert_user(user)
-        home_text = await make_home_message(str(message.from_user.id))
+        await insert_user(user)
+        home_text = await make_home_message(user)
         await message.answer(
                             text=home_text,
                             reply_markup=build_ic_kb())
     elif response.status == 401:
-        await message.answer("Неверный подтверждающий код\\! Введите код повторно")
+        await message.answer(VERIFICATION_ERROR_INCORRECT)
         await state.set_state(Auth.verification_code)
     elif response.status == 404:
-        await message.answer("Код просрочен\\! Пройдите процесс авторизации заново, использовав команду /start")
+        await message.answer(VERIFICATION_ERROR_EXPIRED)
         await state.clear()
 
 

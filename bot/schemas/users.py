@@ -16,6 +16,7 @@ class UserTelegramView(BaseModel):
     fio: str
     program: str
     group: str
+    api_key:str
 
     class Config:
         from_attributes = True

@@ -1,10 +1,14 @@
+import json
 from typing import Any, Callable, Dict, Awaitable
 
 from aiogram import BaseMiddleware
 from aiogram.types import TelegramObject
+from aiogram.types.update import Update
+
 
 from bot.keybords.inline_keyboards.auth_inline import build_auth_kb
 from bot.services.db.auth import get_student_telegram_view
+from bot.services.db.log import insert_action
 from bot.static.text.messages.start_message import START_MESSAGE
 
 class UserInternalCallbackMiddleware(BaseMiddleware):
@@ -12,6 +16,10 @@ class UserInternalCallbackMiddleware(BaseMiddleware):
     async def get_telegram_user(self, telegram_id: int) -> int:
         user = await get_student_telegram_view(telegram_id)
         return user
+    
+    async def log_user_move(self, telegram_id: int, log_message:str = "Модуль ИЦ")->int:
+        action_id = await insert_action(telegram_id, log_message)
+        return action_id
 
     async def __call__(
             self,
@@ -20,6 +28,14 @@ class UserInternalCallbackMiddleware(BaseMiddleware):
             data: Dict[str, Any],
     ) -> Any:
         user = data["event_from_user"]
+        for k, v in data.items():
+            print(f"{k}")
+        update: Update = data["event_update"]
+        print(update.message)
+        update = update.model_dump()
+        print(update)
+
+  
         user_from_db = await self.get_telegram_user(user.id)
         if not user_from_db:
             await event.bot.delete_message(chat_id=event.message.chat.id, message_id=event.message.message_id)
@@ -28,6 +44,7 @@ class UserInternalCallbackMiddleware(BaseMiddleware):
                                         reply_markup=build_auth_kb()
                                        )
             return
+        action_id = await self.log_user_move(telegram_id=user.id)
         data["user_info"] = user_from_db
         return await handler(event, data)
     

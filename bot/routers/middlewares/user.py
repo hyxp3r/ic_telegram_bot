@@ -1,4 +1,3 @@
-import json
 from typing import Any, Callable, Dict, Awaitable
 
 from aiogram import BaseMiddleware
@@ -28,14 +27,16 @@ class UserInternalCallbackMiddleware(BaseMiddleware):
             data: Dict[str, Any],
     ) -> Any:
         user = data["event_from_user"]
-        for k, v in data.items():
-            print(f"{k}")
-        update: Update = data["event_update"]
-        print(update.message)
-        update = update.model_dump()
-        print(update)
 
-  
+        update: Update = data["event_update"]
+        """
+        for keyboard in update.callback_query.message.reply_markup.inline_keyboard:
+            if update.callback_query.data == keyboard[0].callback_data:
+                log = keyboard[0].text
+        
+        print(update.callback_query.message.reply_markup.inline_keyboard[2])
+        """
+
         user_from_db = await self.get_telegram_user(user.id)
         if not user_from_db:
             await event.bot.delete_message(chat_id=event.message.chat.id, message_id=event.message.message_id)
@@ -44,7 +45,7 @@ class UserInternalCallbackMiddleware(BaseMiddleware):
                                         reply_markup=build_auth_kb()
                                        )
             return
-        action_id = await self.log_user_move(telegram_id=user.id)
+        action_id = await self.log_user_move(telegram_id=user.id, log_message=update.callback_query.data)
         data["user_info"] = user_from_db
         return await handler(event, data)
     

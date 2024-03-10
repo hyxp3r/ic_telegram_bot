@@ -18,3 +18,21 @@ class ApiUrls(BaseSettings):
         env_prefix = "API_"
         env_file = ".env"
 
+
+
+class WebServer(BaseSettings):
+    host:str
+    port:str
+
+
+    class Config:
+        env_prefix = "WEB_SERVER_"
+        env_file = ".env"
+
+class Webhook(BaseSettings):
+    path:str
+    url:str
+
+    class Config:
+        env_prefix = "WEBHOOK_"
+        env_file = ".env"

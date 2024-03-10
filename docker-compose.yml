@@ -3,7 +3,7 @@ version: '3.8'
 services:
   db_bot:
     image: postgres:15
-    container_name: db_app
+    container_name: db_bot
     restart: always
     ports:
       - 1271:5432

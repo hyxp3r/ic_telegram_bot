@@ -17,7 +17,7 @@ async def on_startup(bot: Bot) -> None:
     await bot.set_webhook(f"{web_hook_settings.url}{web_hook_settings.path}")
 
 
-async def main() -> None:
+def main() -> None:
     settings = TelegramBot()
 
     dp = Dispatcher()
@@ -40,4 +40,4 @@ async def main() -> None:
 
 if __name__ == "__main__":
     logging.basicConfig(level=logging.INFO, stream=sys.stdout)
-    asyncio.run(main())
+    main()

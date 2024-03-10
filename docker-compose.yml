@@ -11,6 +11,12 @@ services:
       - db_data_bot:/var/lib/postgresql/data
     env_file:
       - .env
+  nginx:
+    build: ./nginx
+    ports:
+      - "80:80"
+      - "443:443"
+    restart: always
 
   bot:
     build:
@@ -23,16 +29,10 @@ services:
     ports:
       - 7000:7000
     depends_on:
+      - nginx
       - db_bot
 
-  nginx:
-    build: ./nginx
-    ports:
-      - "80:80"
-      - "443:443"
-    depends_on:
-      - bot
-    restart: always
+
 
 
 volumes:

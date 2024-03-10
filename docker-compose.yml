@@ -1,0 +1,39 @@
+version: '3.8'
+
+services:
+  db_bot:
+    image: postgres:15
+    container_name: db_app
+    restart: always
+    ports:
+      - 1271:5432
+    volumes:
+      - db_data_bot:/var/lib/postgresql/data
+    env_file:
+      - .env
+
+  bot:
+    build:
+      context: .
+    env_file:
+      - .env
+    container_name: bot
+    restart: always
+    command: bash -c "make migrate && make run_bot"
+    ports:
+      - 8000:7000
+    depends_on:
+      - db_bot
+
+  nginx:
+    build: ./nginx
+    ports:
+      - "80:80"
+      - "443:443"
+    depends_on:
+      - bot
+    restart: always
+
+
+volumes:
+  db_data_bot:

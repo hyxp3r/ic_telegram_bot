@@ -21,7 +21,7 @@ services:
     restart: always
     command: bash -c "make migrate && make run_bot"
     ports:
-      - 8000:7000
+      - 7000:7000
     depends_on:
       - db_bot
 

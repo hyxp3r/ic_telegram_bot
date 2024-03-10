@@ -33,7 +33,6 @@ def main() -> None:
     )
     webhook_requests_handler.register(app, path=web_hook_settings.path)
     setup_application(app, dp, bot=bot)
-
     web.run_app(app, host=web_settings.host, port=web_settings.port)
     #await dp.start_polling(bot)
 

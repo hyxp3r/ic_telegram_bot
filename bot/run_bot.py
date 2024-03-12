@@ -35,7 +35,7 @@ def main() -> None:
         bot=bot,
     )
     logging.info("web")
-    webhook_requests_handler.register(app, path=web_hook_settings.path)
+    webhook_requests_handler.register(app, web_hook_settings.path)
     #setup_application(app, dp, bot=bot)
     logging.info("set up")
     #web.run_app(app, host=web_settings.host, port=web_settings.port)

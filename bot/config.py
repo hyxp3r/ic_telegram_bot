@@ -22,7 +22,7 @@ class ApiUrls(BaseSettings):
 
 class WebServer(BaseSettings):
     host:str
-    port:str
+    port:int
 
 
     class Config:

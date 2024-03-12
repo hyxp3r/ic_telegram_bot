@@ -38,11 +38,12 @@ def main() -> None:
     webhook_requests_handler.register(app, path=web_hook_settings.path)
     setup_application(app, dp, bot=bot)
     logging.info("set up")
-    web.run_app(app, host=web_settings.host, port=web_settings.port)
+    #web.run_app(app, host=web_settings.host, port=web_settings.port)
+    return app
     logging.info("run web")
     #await dp.start_polling(bot)
 
 
 if __name__ == "__main__":
     logging.basicConfig(level=logging.INFO, stream=sys.stdout)
-    main()
+    app = main()

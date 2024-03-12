@@ -27,7 +27,7 @@ services:
     restart: always
     command: bash -c "make migrate && make run_bot_prod"
     ports:
-      - 8080:8080
+      - 7000:7000
     depends_on:
       - nginx
       - db_bot

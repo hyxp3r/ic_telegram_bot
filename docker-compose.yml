@@ -25,7 +25,7 @@ services:
       - .env
     container_name: bot
     restart: always
-    command: bash -c "make migrate && make run_bot_prod"
+    command: bash -c "make migrate && make run_bot"
     ports:
       - 7000:7000
     depends_on:

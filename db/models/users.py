@@ -15,13 +15,16 @@ class Student(BaseTable):
     api_key = sa.Column(sa.String(255), nullable=True, doc='API ключ')
     
     @staticmethod
-    def __make_short_fio(fio: str) -> str:
+    def _make_short_fio(fio: str) -> str:
         short_fio = fio.split(' ')
-        short_fio = f'{short_fio[0]} {short_fio[1][0:1]}.{short_fio[2][0:1]}.'
+        if len(short_fio) > 2:
+            short_fio = f'{short_fio[0]} {short_fio[1][0:1]}.{short_fio[2][0:1]}.'
+        else:
+            short_fio = f'{short_fio[0]} {short_fio[1][0:1]}.'
         return short_fio
 
     def make_user_view(self) -> UserTelegramView:
-        short_fio = self.__make_short_fio(self.fio)
+        short_fio = self._make_short_fio(self.fio)
         user = UserTelegramView(
             personal_number=self.personal_number,
             fio=short_fio,

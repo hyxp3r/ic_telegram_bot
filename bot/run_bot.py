@@ -1,4 +1,3 @@
-import asyncio
 import logging
 import sys
 
@@ -35,15 +34,13 @@ def main() -> None:
         bot=bot,
     )
     logging.info("web")
-    webhook_requests_handler.register(app, web_hook_settings.path)
-    #setup_application(app, dp, bot=bot)
+    webhook_requests_handler.register(app, path=web_hook_settings.path)
+    setup_application(app, dp, bot=bot)
     logging.info("set up")
-    #web.run_app(app, host=web_settings.host, port=web_settings.port)
-    return app
+    web.run_app(app, host=web_settings.host, port=web_settings.port)
     logging.info("run web")
-    #await dp.start_polling(bot)
 
 
 
 logging.basicConfig(level=logging.INFO, stream=sys.stdout)
-app = main()
+main()

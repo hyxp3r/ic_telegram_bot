@@ -35,6 +35,7 @@ async def handle_check_finance(call: CallbackQuery, user_info):
 @router.callback_query(IcCbData.filter(F.action == Action.root))
 async def handle_root(call: CallbackQuery, user_info):
     text = await make_home_message(user_info)
+    await call.answer()
     await call.message.delete()
     await call.message.answer(
         text=text,
